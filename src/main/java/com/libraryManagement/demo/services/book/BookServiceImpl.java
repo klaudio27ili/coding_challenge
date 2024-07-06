@@ -4,10 +4,12 @@ import com.libraryManagement.demo.dal.entities.Book;
 import com.libraryManagement.demo.dal.repositories.BookRepository;
 import com.libraryManagement.demo.dtos.BookGetDTO;
 import com.libraryManagement.demo.dtos.BookPostPatchDTO;
+import com.libraryManagement.demo.dtos.FilterDTO;
 import com.libraryManagement.demo.exception.ApiException;
 import com.libraryManagement.demo.exception.ErrorCode;
 import com.libraryManagement.demo.exception.MessageKey;
 import com.libraryManagement.demo.mappers.BookMapper;
+import com.libraryManagement.demo.services.utils.SpecificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceImpl implements BookService{
+public class BookServiceImpl extends SpecificationService<Book> implements BookService{
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
@@ -43,8 +45,14 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public List<BookGetDTO> search(List<String> tags) {
-        return null;
+    public List<BookGetDTO> search(FilterDTO filterDTO) {
+        List<String> tags = filterDTO.getTags();
+        if(tags.isEmpty()) {
+            throw new ApiException(ErrorCode.BAD_REQUEST, MessageKey.TAGS_CANNOT_BE_EMPTY);
+        }
+        return bookMapper.toDTOs(
+                bookRepository.findAll(jsonArrayContains(tags))
+        );
     }
 
     private boolean isIsbnValid(String isbn) {

@@ -2,10 +2,11 @@ package com.libraryManagement.demo.services.book;
 
 import com.libraryManagement.demo.dtos.BookGetDTO;
 import com.libraryManagement.demo.dtos.BookPostPatchDTO;
+import com.libraryManagement.demo.dtos.FilterDTO;
 
 import java.util.List;
 
 public interface BookService {
     void save(BookPostPatchDTO bookPostPatchDTO);
-    List<BookGetDTO> search(List<String> tags);
+    List<BookGetDTO> search(FilterDTO filterDTO);
 }
