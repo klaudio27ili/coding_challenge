@@ -8,6 +8,7 @@ import com.libraryManagement.demo.dtos.FilterDTO;
 import com.libraryManagement.demo.exception.ApiException;
 import com.libraryManagement.demo.exception.ErrorCode;
 import com.libraryManagement.demo.exception.MessageKey;
+import com.libraryManagement.demo.helpers.PatternConstants;
 import com.libraryManagement.demo.mappers.BookMapper;
 import com.libraryManagement.demo.services.utils.SpecificationService;
 import lombok.RequiredArgsConstructor;
@@ -60,8 +61,21 @@ public class BookServiceImpl extends SpecificationService<Book> implements BookS
     }
 
     private boolean isNumeric(String isbn) {
-        //todo: add it to helpers, constants
-        Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+        Pattern pattern = Pattern.compile(PatternConstants.IS_NUMERIC);
         return pattern.matcher(isbn).matches();
     }
+
+    // JDBC implementation for searching books
+//    public List<BookGetDTO> getBooksJdbc(FilterDTO filterDTO) {
+//        String query = "SELECT * FROM book WHERE ";
+//        StringBuilder conditions = new StringBuilder();
+//        for(int i = 0; i < filterDTO.getTags().size(); i++) {
+//            if(i > 0) {
+//                conditions.append(" AND ");
+//            }
+//            conditions.append("jsonb_exists(tags, ?)");
+//        }
+//        query += conditions.toString();
+//        return bookMapper.toDTOs(jdbcTemplate.query(query, filterDTO.getTags().toArray(), new BookRowMapper()));
+//    }
 }
