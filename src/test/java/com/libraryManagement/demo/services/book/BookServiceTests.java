@@ -1,5 +1,6 @@
 package com.libraryManagement.demo.services.book;
 
+import com.libraryManagement.demo.BaseLibraryManagementTest;
 import com.libraryManagement.demo.dal.entities.Book;
 import com.libraryManagement.demo.dal.entities.Tag;
 import com.libraryManagement.demo.dal.repositories.BookRepository;
@@ -8,23 +9,14 @@ import com.libraryManagement.demo.dtos.BookPostPatchDTO;
 import com.libraryManagement.demo.dtos.FilterDTO;
 import com.libraryManagement.demo.exception.ApiException;
 import com.libraryManagement.demo.services.tag.TagService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ActiveProfiles("test")
-@Transactional
-public class BookServiceTests {
+public class BookServiceTests extends BaseLibraryManagementTest {
     @Autowired
     private BookService bookService;
 

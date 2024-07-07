@@ -1,6 +1,5 @@
 package com.libraryManagement.demo.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.libraryManagement.demo.dtos.BookGetDTO;
 import com.libraryManagement.demo.dtos.BookPostPatchDTO;
 import com.libraryManagement.demo.dtos.FilterDTO;
@@ -29,4 +28,5 @@ public class BookController {
     public ResponseEntity<List<BookGetDTO>> search(@RequestBody FilterDTO filterDTO) {
         return ResponseEntity.ok(bookService.search(filterDTO));
     }
+
 }

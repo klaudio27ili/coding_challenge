@@ -1,23 +1,15 @@
 package com.libraryManagement.demo.services.tag;
 
+import com.libraryManagement.demo.BaseLibraryManagementTest;
 import com.libraryManagement.demo.dal.entities.Tag;
 import com.libraryManagement.demo.dal.repositories.TagRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Set;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ActiveProfiles("test")
-@Transactional
-public class TagServiceTests {
+public class TagServiceTests extends BaseLibraryManagementTest {
     @Autowired
     private TagService tagService;
 

@@ -4,7 +4,10 @@ import com.libraryManagement.demo.dal.entities.Tag;
 import com.libraryManagement.demo.dal.repositories.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +26,7 @@ public class TagServiceImpl implements TagService{
 
     @Override
     public Set<Tag> findByNames(List<String> tagNames) {
-        Set<Tag> tags = new HashSet<>();
-        tagNames.forEach(tag -> {
-                    Optional<Tag> tagOptional = tagRepository.findByNameIgnoreCase(tag);
-                    tagOptional.ifPresent(tags::add);
-                }
-        );
-        return tags;
+        return new HashSet<>(tagRepository.findByNames(tagNames));
     }
+
 }
