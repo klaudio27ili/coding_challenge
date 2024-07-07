@@ -63,41 +63,45 @@ public class BookServiceImpl extends SpecificationService<Book> implements BookS
             return Collections.emptyList();
         }
         return bookMapper.toDTOs(
-                bookRepository.findAllByTagsIn(tags, (long)tags.size())
+                getByTagsJdbc(filterDTO.getTags())
         );
     }
 
-    private List<Book> getByTagsJdbc(Set<Tag> tags) {
-        Set<UUID> tagIds = new HashSet<>();
-        for (Tag tag : tags) {
-            tagIds.add(tag.getId());
-        }
-
+    private List<Book> getByTagsJdbc(List<String> tags) {
         StringBuilder placeholders = new StringBuilder();
-        for (int i = 0; i < tagIds.size(); i++) {
+        for (int i = 0; i < tags.size(); i++) {
             if (i > 0) {
                 placeholders.append(", ");
             }
             placeholders.append("?");
         }
 
-        String query = "SELECT b.id, b.isbn " +
+        String query = "SELECT b.id, b.isbn, t.name " +
                 "FROM book b " +
                 "JOIN book_tag bt ON b.id = bt.book_id " +
                 "JOIN tag t ON bt.tag_id = t.id " +
-                "WHERE t.id IN (" + placeholders + ") " +
+                "WHERE b.id IN (" +
+                "SELECT b.id " +
+                "FROM book b " +
+                "JOIN book_tag bt ON b.id = bt.book_id " +
+                "JOIN tag t ON bt.tag_id = t.id " +
+                "WHERE t.name IN ("+ placeholders +") " +
                 "GROUP BY b.id " +
-                "HAVING COUNT(DISTINCT t.id) = ?";
+                "HAVING COUNT(DISTINCT t.name) = ? " +
+                ") " +
+                "ORDER BY b.id, t.name;";
 
         PreparedStatementSetter pss = preparedStatement -> {
             int i = 1;
-            for (UUID tagId : tagIds) {
-                preparedStatement.setObject(i++, tagId);
+            for (String tag : tags) {
+                preparedStatement.setObject(i++, tag);
             }
-            preparedStatement.setInt(i, tagIds.size());
+            preparedStatement.setInt(i, tags.size());
         };
 
-        return jdbcTemplate.query(query, pss, new BookRowMapper());
+        BookRowMapper rowMapper = new BookRowMapper();
+        jdbcTemplate.query(query, pss, rowMapper);
+        return rowMapper.getBooks();
     }
 
     private boolean isIsbnValid(String isbn) {
