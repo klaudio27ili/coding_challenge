@@ -13,8 +13,7 @@ public class TagServiceImpl implements TagService{
     @Override
     public Set<Tag> findByNameOrSave(List<String> tagNames) {
         Set<Tag> tags = new HashSet<>();
-        tagNames.forEach(tag -> {
-            Optional<Tag> tagOptional = tagRepository.findByName(tag);
+        tagNames.forEach(tag -> {Optional<Tag> tagOptional = tagRepository.findByNameIgnoreCase(tag);
             tags.add(tagOptional.orElseGet(() -> tagRepository.save(
                     new Tag(tag)
             )));
@@ -26,7 +25,7 @@ public class TagServiceImpl implements TagService{
     public Set<Tag> findByNames(List<String> tagNames) {
         Set<Tag> tags = new HashSet<>();
         tagNames.forEach(tag -> {
-                    Optional<Tag> tagOptional = tagRepository.findByName(tag);
+                    Optional<Tag> tagOptional = tagRepository.findByNameIgnoreCase(tag);
                     tagOptional.ifPresent(tags::add);
                 }
         );
