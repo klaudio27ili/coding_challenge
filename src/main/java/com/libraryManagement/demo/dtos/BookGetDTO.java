@@ -9,5 +9,5 @@ import java.util.List;
 @Setter
 public class BookGetDTO {
     private String isbn;
-    private List<String> tags;
+    private List<TagGetDTO> tags;
 }
