@@ -19,6 +19,6 @@ public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificat
     @Query(value = "SELECT * from Book b WHERE b.tags @> cast(:tags AS jsonb)", nativeQuery = true)
     List<Book> findByTags(@Param("tags") String tags);
 
-    @Query("SELECT DISTINCT b FROM Book b JOIN b.tags t WHERE t IN :tags GROUP BY b HAVING COUNT(DISTINCT t) = :tagCount")
-    List<Book> findAllByTagsIn(@Param("tags") Set<Tag> tags, @Param("tagCount") Long tagCount);
+    @Query("SELECT DISTINCT b FROM Book b JOIN b.tags t WHERE t.name IN :tags GROUP BY b HAVING COUNT(DISTINCT t) = :tagCount")
+    List<Book> findAllByTagsIn(@Param("tags") Set<String> tags, @Param("tagCount") Long tagCount);
 }

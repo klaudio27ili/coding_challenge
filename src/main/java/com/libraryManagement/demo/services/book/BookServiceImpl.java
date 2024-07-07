@@ -58,10 +58,6 @@ public class BookServiceImpl extends SpecificationService<Book> implements BookS
         if(filterDTO.getTags().isEmpty()) {
             throw new ApiException(ErrorCode.BAD_REQUEST, MessageKey.TAGS_CANNOT_BE_EMPTY);
         }
-        Set<Tag> tags = tagService.findByNames(filterDTO.getTags());
-        if(filterDTO.getTags().size() != tags.size()) {
-            return Collections.emptyList();
-        }
         return bookMapper.toDTOs(
                 getByTagsJdbc(filterDTO.getTags())
         );
